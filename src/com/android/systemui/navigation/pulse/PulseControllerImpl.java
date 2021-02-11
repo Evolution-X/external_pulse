@@ -483,14 +483,11 @@ public class PulseControllerImpl
      * @return true if unlink is required, false if unlinking is not mandatory
      */
     private boolean isUnlinkRequired() {
-        boolean result = mPowerSaveModeEnabled
+        return (!mScreenOn && !mAmbPulseEnabled)
+                || mPowerSaveModeEnabled
                 || mMusicStreamMuted
                 || mScreenPinningEnabled
                 || !mAttached;
-        if (!mAmbPulseEnabled) {
-            result = result || !mScreenOn;
-        }
-        return result;
     }
 
     /**
@@ -499,15 +496,12 @@ public class PulseControllerImpl
      * @return true if all conditions are met to allow link, false if and conditions are not met
      */
     private boolean isAbleToLink() {
-        boolean result = mIsMediaPlaying
+        return (mScreenOn || mAmbPulseEnabled)
+                && mIsMediaPlaying
                 && !mPowerSaveModeEnabled
                 && !mMusicStreamMuted
                 && !mScreenPinningEnabled
                 && mAttached;
-        if (!mAmbPulseEnabled) {
-            result = result || mScreenOn;
-        }
-        return result;
     }
 
     private void doUnlinkVisualizer() {
